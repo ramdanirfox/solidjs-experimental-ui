@@ -1,0 +1,99 @@
+# Solid Experimental
+
+![image](https://github.com/user-attachments/assets/b11ad314-cbf2-474f-adee-a2266975cd4e)
+
+This repo contains sample of certain library integration with SolidJS
+Currently includes :
+- [Golden Layout](https://github.com/golden-layout/golden-layout) (web based dock layout manager)
+- Mounting React Component (svar-gantt)
+- Google Maps and DeckGL Integration
+- Vitest
+- SolidStart
+
+# Dependencies
+
+- Node JS (v22.12.0)
+- PNPM package manager
+
+# Running
+Install dependencies before running by executing `pnpm i` beforehand
+- Project: `pnpm run dev` (open port 3011)
+- Test (Vitest) `pnpm run test` or `pnpm run test-ui`; browser E2E (Playwright) `pnpm run e2e` — see **Pengujian** below
+
+# Pengujian (unit, komponen, dan E2E)
+
+Berkas uji **bagian dari proyek** (di-commit): `*.test.ts(x)` berdampingan dengan kodenya dan `e2e/*.e2e.ts` untuk uji peramban.
+
+| Perintah | Isi |
+| --- | --- |
+| `pnpm test` | Vitest sekali jalan: unit (node) + komponen (jsdom). Contoh satu editor: `pnpm test src/shared/components/xlsx-preview` |
+| `pnpm test-watch` / `pnpm test-ui` | mode watch / UI Vitest |
+| `pnpm typecheck` | `tsc --noEmit` (ada beberapa galat lama di luar editor Office; yang baru tidak boleh bertambah) |
+| `pnpm e2e:install` | sekali saja: unduh Chromium untuk Playwright |
+| `pnpm e2e` | semua uji E2E (`e2e/*.e2e.ts`) di Chromium — otomatis menjalankan `pnpm run dev` (https, port 3011) bila belum berjalan, atau memakai server yang sudah ada |
+| `pnpm e2e e2e/xlsx-formulas.e2e.ts` | satu berkas E2E; `pnpm e2e:ui` = mode UI interaktif; `pnpm e2e:report` = laporan HTML terakhir |
+
+Variabel lingkungan E2E: `E2E_BASE_URL` (mis. `https://localhost:3011/solidjs-experimental/` — **wajib diakhiri `/`**; bila diisi, Playwright tidak menjalankan dev server), `E2E_PORT` (default 3011), `CI` (tanpa reuse server, 1 retry).
+Uji berkas nyata (opsional, dilewati bila tidak diset): `XLSX_SAMPLE="C:\path\pembobotan IP analytic V1.xlsx"` untuk uji unit (`xlsx-equation-ops.test.ts`) dan E2E (`xlsx-formulas.e2e.ts`).
+
+Struktur & konvensi:
+- `e2e/helpers.ts` (muat fixture lewat input file editor, Name box, bar formula), `e2e/math-samples.ts` (isi clipboard Word/LibreOffice untuk uji interop), `e2e/<editor>-*.e2e.ts` per editor; fixture workbook dirakit kode (`src/shared/components/xlsx-preview/test-fixture.ts`: `formulaXlsx()` memuat formula biasa, *shared*, *array*, lintas sheet, dan defined name) — tidak ada berkas biner uji yang di-commit.
+- Uji komponen (jsdom) tidak dapat menjalankan penulis zip library (`workbookToBytes`); round-trip simpan→buka diuji di lingkungan `node` (`// @vitest-environment node`) dan E2E.
+- Hasil E2E (`test-results/`, `playwright-report/`) diabaikan git.
+- Kegagalan lama yang tidak terkait: `docx-hf.test.ts` (4 uji) membutuhkan `public/test/DOCX_SAMPLE_LAYOUT_V2.docx` yang tidak ada di repo.
+
+# Tauri Android Configurations
+
+install sdk 35 
+install ndk 28
+install jdk 21
+
+Post signing :
+
+AppData\Local\Android\Sdk\build-tools\35.0.0>apksigner.bat sign --ks %USERPROFILE%\upload-keystore.jks --out %USERPROFILE%\app-signed.apk %USERPROFILE%\app-universal-release-unsigned.apk
+
+If you face some build error EPERM with `pnpm run prodpack` when moving folder, try to shutdown development server first
+
+# Integration Roadmap
+- Golden Layout - Listen and/or to as many APIs
+- Golden Layout - Programmatic event possiblities
+- Mounting React Components and interact with it
+- [Solid Gridstack](https://github.com/FelixWieland/solid-gridstack) or [gridstack.js](https://github.com/gridstack/gridstack.js)
+- [Winbox](https://github.com/nextapps-de/winbox)
+- [maxgraph](https://maxgraph.github.io/) (continuation of mxgraph)
+- [JSGantt Improved](https://github.com/jsGanttImproved/jsgantt-improved/)
+
+# Todo
+
+- https://github.com/NikolaySuslov/solid-braid-quill.git
+
+- [P9] https://github.com/adarshhegde/solid-graph-visualiser
+
+- https://github.com/traccar/maplibre-google-maps
+
+
+# Notes - Golden Layout integration with SolidJS
+- Similar JSX instance will replace older one when rendered twice (to mitigate this, provide function that return JSX.Element to create new instance of JSX)
+- Context doesnt connect each other between different render (pass context from GoldenLayoutView as workaround, but super inconvenient :sad )
+
+UPDATES 2026-04
+- Context work now as expected (we try to keep reactive graph still intact by implement component mounting with SolidJS Portal) by using GoldenLayoutView2
+
+# Notes - react-solid-bridge
+- It's outdated, works with React 17.0.2
+- This library is only works inside React Enviroment. (See this example)[https://codesandbox.io/p/sandbox/react-solid-bridge-solid-app-router-7wowh], Pay attention to index.js file
+- Just manually mounting ReactDOM and its Component just do the job to use React Components inside SolidJS (but cannot use jsx/tsx)
+
+# Others
+ tar -cvf - -p tileserver-gl-light/ | xz > tileserver-gl-light_4101_node16151.tar.xz
+ cat my_large_archive.tar.gz.part_* > my_large_archive_reconstructed.tar.gz
+
+ # Sources
+
+ArcLayer path - https://github.com/visgl/deck.gl/issues/8447
+Manual ArcLayer path - https://codepen.io/chrisgervang/pen/yLwQdoe
+
+https://cdn.jsdelivr.net/gh/gavinr/world-countries-centroids@v1.0.0/dist/countries.geojson
+
+Routing example
+https://valhalla1.openstreetmap.de/route?json={%22locations%22:[{%22lat%22:-6.315891,%22lon%22:106.816505,%22street%22:%22Park%22},{%22lat%22:-6.336195,%22lon%22:106.803065,%22street%22:%22Point%20Home%22}],%22costing%22:%22auto%22,%22costing_options%22:{%22auto%22:{%22country_crossing_penalty%22:2000.0}},%22units%22:%22kilometers%22,%22id%22:%22my_work_route%22,%20%22format%22:%20%22osrm%22,%20%22shape_format%22:%22geojson%22}
