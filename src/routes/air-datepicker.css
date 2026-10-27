@@ -1,0 +1,22 @@
+.adp-page { display: grid; grid-template-columns: minmax(250px, 310px) 1fr; gap: 16px; align-items: start; }
+@media (max-width: 900px) { .adp-page { grid-template-columns: 1fr; } }
+.adp-panel { display: flex; flex-direction: column; gap: 12px; }
+.adp-panel fieldset { margin: 0; padding: 10px 12px; border: 1px solid var(--sjx-border); border-radius: var(--sjx-radius); background: var(--sjx-surface); display: flex; flex-direction: column; gap: 8px; }
+.adp-panel legend { padding: 0 6px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--sjx-muted); }
+.adp-row { display: flex; flex-direction: column; gap: 3px; font-size: 13px; }
+.adp-row select { padding: 4px 8px; border: 1px solid var(--sjx-border); border-radius: 8px; font: inherit; }
+.adp-check { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.adp-main { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.adp-card { padding: 14px 16px; border: 1px solid var(--sjx-border); border-radius: var(--sjx-radius); background: var(--sjx-surface); display: flex; flex-direction: column; gap: 10px; }
+.adp-card h3 { margin: 0; font-size: 15px; }
+.adp-input { padding: 8px 12px; border: 1px solid var(--sjx-border); border-radius: 10px; font: inherit; max-width: 320px; cursor: pointer; }
+.adp-pair { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.adp-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.adp-btn { padding: 5px 12px; font-size: 13px; border: 1px solid var(--sjx-border); border-radius: 999px; background: #fff; cursor: pointer; }
+.adp-out { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
+.adp-muted { color: var(--sjx-muted); font-size: 12px; }
+.adp-log { margin: 0; padding: 8px 12px; list-style: none; max-height: 220px; overflow: auto; font: 12px/1.6 ui-monospace, Menlo, Consolas, monospace; border-radius: var(--sjx-radius); background: #0f172a; color: #cbd5e1; }
+/* sel kustom dari onRenderCell */
+.air-datepicker-cell.adp-mark { position: relative; font-weight: 700; color: #b45309; }
+.adp-dot { position: absolute; bottom: 3px; left: 50%; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: #f59e0b; }
+.air-datepicker-global-container { z-index: 2000; }
